@@ -14,9 +14,9 @@ namespace DZ_9
 
             using (var myWebClient = new WebClient())
             {
-                Console.WriteLine("Downloading \"{0}\" from \"{1}\" .......\n\n", fileName, remoteUri);
+                Console.WriteLine("Загрузка: \"{0}\" from \"{1}\" .......\n\n", fileName, remoteUri);
                 await myWebClient.DownloadFileTaskAsync(remoteUri, fileName);
-                Console.WriteLine("Successfully downloaded \"{0}\" from \"{1}\"", fileName, remoteUri);
+                Console.WriteLine("Успешно загружено \"{0}\" from \"{1}\"", fileName, remoteUri);
             }
 
             OnImageCompleted();
@@ -50,16 +50,17 @@ namespace DZ_9
             List<Task> downloadTasks = new List<Task>();
 
             ImageDownloader downloader = new ImageDownloader();
-            downloader.ImageStarted += (sender, e) => Console.WriteLine("Downloading started...");
-            downloader.ImageCompleted += (sender, e) => Console.WriteLine("Downloading completed...");
+            downloader.ImageStarted += (sender, e) => Console.WriteLine("Скачивание файла началось");
+            downloader.ImageCompleted += (sender, e) => Console.WriteLine("Скачивание файла закончилось");
 
             foreach (var uri in remoteUris)
             {
                 string fileName = uri.Substring(uri.LastIndexOf('/') + 1);
                 downloadTasks.Add(downloader.DownloadAsync(uri, fileName));
             }
-
-            Console.WriteLine("Press 'A' to exit or any other key to check download status...");
+            Console.WriteLine("-------------------------------------------------------------------------------------");
+            Console.WriteLine("Нажмите клавишу A для выхода или любую другую клавишу для проверки статуса скачивания");
+            Console.WriteLine("-------------------------------------------------------------------------------------");
 
             while (true)
             {
@@ -74,13 +75,13 @@ namespace DZ_9
                     {
                         foreach (var task in downloadTasks)
                         {
-                            Console.WriteLine($"Image Downloaded: {task.IsCompleted}");
+                            Console.WriteLine($"Статус загрузки: {task.IsCompleted}");
                         }
                     }
                 }
             }
 
-            Console.WriteLine("Exiting...");
+            Console.WriteLine("Выход");
         }
 
     }
